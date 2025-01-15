@@ -1,11 +1,15 @@
 # SpaceLVG
-- SpaceLVG, a híres cég SpaceX következő generációja
-**Csapattagok**
+### SpaceLVG, a híres cég SpaceX következő generációja ###
+
+ *Csapattagok*
 - Varga Viktor József
 - Juhasz Gábor
 - Szilágyi Levente
 
-- ### Dokumentalas
+*Publikus Jira Link*
+ - [Jira link](https://spacelvg.atlassian.net/jira/)
+
+ *Feladatok*
 ## 2025.01.11
   - Github létrehozása.
   - Github repositoryba emberek meghívása.
@@ -32,3 +36,4 @@
   |       | Branch-Kozpont
   |       | Branch-Social Media Manager        
 ```
+
