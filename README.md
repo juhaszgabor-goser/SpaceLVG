@@ -1,5 +1,34 @@
 # SpaceLVG
-SpaceLVG, a híres cég SpaceX következő generációja
-Tagok: Juhász Gábor
-       Viktor Varga József
-       Szilágyi Levente
+- SpaceLVG, a híres cég SpaceX következő generációja
+**Csapattagok**
+- Varga Viktor József
+- Juhasz Gábor
+- Szilágyi Levente
+
+- ### Dokumentalas
+## 2025.01.11
+  - Github létrehozása.
+  - Github repositoryba emberek meghívása.
+  - Jira létrehozása, csapattagok meghívása.
+  - README.md update.
+## 2025.01.12
+  - Alap Packet Tracer tervrajz létrehozása.
+  - Dokumentáció létrehozása és leírás elkezdése.
+## 2025.01.13
+  - Packet Tracer továbbfejlesztése.
+  - Packet Tracer telephelyek kiosztása feladatok szempontjából.
+## 2025.01.14
+  - Extra részleg Juhász Gábor telephelyéhez hozzárakva.
+  - Dokumentáció frissítése új információval.
+## 2025.01.15
+  - IP Címek kiosztása különböző telephelyekre
+  - Dokumentáció kibővítése nem teljes logikai topológiával
+  - Jira-ba Varga József tanár úr meghívása
+  - Github branch-ek létrehozása
+   ```
+  |   |
+  |   └─── Branchek
+  |       | Branch-SzerverFarm
+  |       | Branch-Kozpont
+  |       | Branch-Social Media Manager        
+```
