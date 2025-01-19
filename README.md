@@ -37,3 +37,5 @@
   |       | Branch-Social Media Manager        
 ```
 
+## 2025.01.19
+ - Packet Tracer eszközök hozzáadása
