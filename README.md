@@ -39,3 +39,7 @@
 
 ## 2025.01.19
  - Packet Tracer eszközök hozzáadása
+## 2025.01.27
+ - Packet Tracer fríssítése
+ - SpaceLVG dokumentáció.docx kitörlése
+ - Logikai topológia.docx feltöltése
