@@ -32,14 +32,21 @@
    ```
   |   |
   |   └─── Branchek
-  |       | Branch-SzerverFarm
+  |       | Branch-SzerverSzoba
   |       | Branch-Kozpont
   |       | Branch-Social Media Manager        
 ```
 
 ## 2025.01.19
  - Packet Tracer eszközök hozzáadása
-## 2025.01.27
+## 2025.01.27 (01:30)
  - Packet Tracer fríssítése
  - SpaceLVG dokumentáció.docx kitörlése
  - Logikai topológia.docx feltöltése
+## 2025.01.27 (18:25)
+ - Packet Tracer fríssítése
+ - Logikai topológia.docx kitörlése átnevezés miatt
+ - Logikai topológia melléklet.docx
+ - Egész.png feltöltése main branchbe (egész pkt-ról kép)
+ - "Telephelynév".png feltöltések a saját respektív branchükbe
+
