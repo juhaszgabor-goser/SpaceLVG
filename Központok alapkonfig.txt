@@ -1,0 +1,164 @@
+Irányító központ Switch
+
+ena
+clock set 12:00:00 febr 27 2025
+conf t
+host Iranyito_kozpont_Switch
+ena sec class123
+no ip domain-lookup
+line con 0
+pass cisco123
+login
+logg syn
+exec 5
+exit
+line vty 0 15
+pass cisco123
+login
+logg syn
+exec 5
+exit
+ser pass
+banner motd "Ez egy privat switch!"
+vlan 10
+name Iranyito
+exit
+ip domain-name SpaceLVG.hu
+crypto key generate rsa
+2048
+username admin priv 15 secret cisco123
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+exit
+copy running-config startup-config
+
+
+
+
+
+
+
+
+
+
+
+Kutató központ Switch
+
+ena
+clock set 12:00:00 febr 27 2025
+conf t
+host Kutato_kozpont_Switch
+ena sec class123
+no ip domain-lookup
+line con 0
+pass cisco123
+login
+logg syn
+exec 5
+exit
+line vty 0 15
+pass cisco123
+login
+logg syn
+exec 5
+exit
+ser pass
+banner motd "Ez egy privat switch!"
+vlan 30
+name Kutato_kozpont
+exit
+ip domain-name SpaceLVG.hu
+crypto key generate rsa
+2048
+username admin priv 15 secret cisco123
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+exit
+copy running-config startup-config
+
+
+
+
+
+Tervező központ Switch
+
+ena
+clock set 12:00:00 febr 27 2025
+conf t
+host Tervezo_kozpont_Switch
+ena sec class123
+no ip domain-lookup
+line con 0
+pass cisco123
+login
+logg syn
+exec 5
+exit
+line vty 0 15
+pass cisco123
+login
+logg syn
+exec 5
+exit
+ser pass
+banner motd "Ez egy privat switch!"
+vlan 20
+name Tervezo_kozpont
+exit
+ip domain-name SpaceLVG.hu
+crypto key generate rsa
+2048
+username admin priv 15 secret cisco123
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+exit
+copy running-config startup-config
+
+
+
+
+
+
+
+Összekötő Switch 1
+
+ena
+clock set 12:00:00 febr 27 2025
+conf t
+host Osszekoto_Switch1
+ena sec class123
+no ip domain-lookup
+line con 0
+pass cisco123
+login
+logg syn
+exec 5
+exit
+line vty 0 15
+pass cisco123
+login
+logg syn
+exec 5
+exit
+ser pass
+banner motd "Ez egy privat switch!"
+ip domain-name SpaceLVG.hu
+crypto key generate rsa
+2048
+username admin priv 15 secret cisco123
+ip ssh version 2
+line vty 0 15
+login local
+transport input ssh
+exit
+exit
+copy running-config startup-config
