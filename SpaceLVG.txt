@@ -67,10 +67,12 @@ exit
 
 route eig 100
 eigrp rout 5.5.5.5
+redistribute static
 no auto
 netw 10.10.80.0 0.0.0.255
 netw 10.10.10.0 0.0.0.3
 exit
+ip route 209.111.222.0 255.255.255.0 10.10.10.1
 
 ip dhcp exc 10.10.80.1 10.10.80.20
 ip dhcp pool SMM_pool
@@ -80,10 +82,8 @@ dns 172.16.10.254
 domain spacelvg.hu
 
 
-ip access-list exten block_centers
-deny ip 10.10.80.0 0.0.0.3 192.168.10.0 0.0.0.3
-deny ip 10.10.80.0 0.0.0.3 192.168.20.0 0.0.0.3
-deny ip 10.10.80.0 0.0.0.3 192.168.30.0 0.0.0.3
+ip access-list extended Cell_Tower_Block
+deny ip 172.16.20.0 0.0.0.3 10.10.80.0 0.0.0.255
 permit ip any any
 exit
 
@@ -218,6 +218,7 @@ exit
 route eig 100
 eigrp rout 1.1.1.1
 no auto
+redistribute static
 netw 10.10.50.0 0.0.0.3
 netw 10.10.40.0 0.0.0.3
 netw 10.10.20.0 0.0.0.3
@@ -225,6 +226,7 @@ netw 10.10.10.0 0.0.0.3
 netw 209.165.40.0 0.0.0.3
 exit
 
+ip route 209.111.222.0 255.255.255.0 10.10.40.2
 ip route 0.0.0.0 0.0.0.0 30.30.10.2 100
 
 end
@@ -235,6 +237,9 @@ copy run st
 								Server Room Router
 --------------------------------------------------------------------------------------------------------------------
 
+-----------------------------------------------------------------------------
+Gabor reszenek kezdete (Topologia valtozassal Viktor is csinalt benne dolgokat)
+-----------------------------------------------------------------------------
 en
 clock set 12:20:00 25 febr 2025
 conf t
@@ -297,6 +302,10 @@ no ip address 20.20.10.2 255.255.255.252
 no des ASA Firewall fele
 sh
 exit
+
+-----------------------------------------------------------------------------
+Gabor reszenek vege (Topologia valtozassal Viktor is csinalt benne dolgokat)
+-----------------------------------------------------------------------------
 
 route eig 100
 eigrp rout 2.2.2.2
@@ -464,157 +473,6 @@ copy run st
 
 
 
---------------------------------------------------------------------------------------------------------------------
-								Server_NAT_router
---------------------------------------------------------------------------------------------------------------------
-
-en
-clock set 12:20:00 25 febr 2025
-conf t
-host Server_NAT_router
-no ip domain-l
-ena sec secret123
-banner motd "Connects to the internet provider"
-
-lin con 0
-pass class123
-login
-logg syn
-exec 7
-exit
-
-lin vty 0 15
-pass class123
-login
-logg syn
-exec 7
-exit
-
-
-
-ip domain-name SpaceLVG.hu
-cry k g r
-2048
-
-username admin priv 15 secret class123
-ip ssh version 2
-lin vty 0 15
-login local
-transport input ssh
-exit
-
-int s0/3/0
-ip add 10.10.120.1 255.255.255.252
-clock rate 4000000
-no sh
-des Connection Router 1 fele
-exit
-
-int s0/2/0
-ip add 10.10.130.2 255.255.255.252
-des Server Room Router fele
-no sh
-exit
-
-
-int g0/1
-ip add 30.30.10.2 255.255.255.252
-des FLOATROUTE to MR fele
-no sh
-exit
-
-
-int g0/0
-ip add 30.30.30.2 255.255.255.252
-des ASA Firewall fele
-no sh
-exit
-
-ip nat inside source static 172.16.10.254 209.111.222.10
-ip nat inside source static 172.16.10.250 209.111.222.11
-
-int g0/0
-ip nat inside
-exit
-int s0/2/0
-ip nat outside
-exit
-int s0/3/0
-ip nat outside
-exit
-
-
-router eigrp 100
-eigr ro 6.6.6.6
-no auto
-netw 30.30.30.0 0.0.0.3
-netw 10.10.120.0 0.0.0.3
-netw 10.10.130.0 0.0.0.3
-exit
-
-
-
-no ip route 0.0.0.0 0.0.0.0 serial0/2/0
-ip route 0.0.0.0 0.0.0.0 30.30.10.1 100
-
-
-
-
------------------------------------------------------------------------------------------------------------------------------------
-								SMT Switch
------------------------------------------------------------------------------------------------------------------------------------
-
-en
-clock set 12:20:00 25 febr 2025
-conf t
-host SMT Switch
-no ip domain-l
-ena sec secret123
-banner motd "SMT Switch"
-
-ip domain-name SpaceLVG.hu
-cry k g r
-2048
-
-username admin priv 15 secret class123
-ip ssh version 2
-lin vty 0 15
-login local
-transport input ssh
-exit
-
-vlan 1000
-name Blackhole
-exit
-
-
-int r f0/5-24, g0/2
-swit mode acc
-swit acc vlan 1000
-sh
-exit
-
-lin con 0
-pass class123
-login
-logg syn
-exec 7
-exit
-
-lin vty 0 15
-pass class123
-login
-logg syn
-exec 7
-exit
-
-
-int r f0/1-4
-swit port agin tim 60
-swit port max 3
-swit port viola rest
-exit
-
 
 -----------------------------------------------------------------------------------------------------------------------------------
 							Telekom cloud
@@ -675,6 +533,10 @@ no ip route 0.0.0.0 0.0.0.0 serial0/2/0
 ---------------------------------------------------------------------------------------------------
 							Központi Router
 ---------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Levente reszenek kezdete (Topologia valtozassal Viktor is csinalt benne dolgokat)
+-----------------------------------------------------------------------------
 ena
 clock set 12:00:00 mar 02 2025
 conf t
@@ -790,9 +652,13 @@ exit
 int g0/1
 ip add 192.168.60.1 255.255.255.0
 no sh
+-----------------------------------------------------------------------------
+Levente reszenek vege (Topologia valtozassal Viktor is csinalt benne dolgokat)
+-----------------------------------------------------------------------------
 
 router eigrp 100
 eigrp router-id 8.8.8.8
+redistribute static
 network 192.168.10.0 0.0.0.255
 network 192.168.20.0 0.0.0.255
 network 192.168.30.0 0.0.0.255
@@ -803,6 +669,7 @@ network 10.10.40.0 0.0.0.3
 no auto summary
 passive-interface gigabitethernet0/0
 exit
+route outside 209.111.222.0 255.255.255.0 10.10.120.1
 
 ip access-list ext block_traffic
 deny ip any 10.10.50.1 0.0.0.3
@@ -878,43 +745,3 @@ ppp authentication pap
 ppp pap sent-username MR password cisco123
 no shutdown
 exit
-
------------------------------------------------------------------------------
-				ASA
-
-enable
-
-
-configure terminal
-hostname ServerFirewall
-enable password class123
-
-interface gigabitethernet1/1
-nameif inside
-security-level 100
-ip address 172.16.10.1 255.255.255.0
-no shutdown
-exit
-
-interface gigabitethernet1/2
-nameif outside
-security-level 0
-ip address 30.30.30.1 255.255.255.252
-no shutdown
-exit
-
-router eigrp 100
-eigrp router-id 10.10.10.10
-no auto-summary
-network 172.16.10.0 255.255.255.0
-network 30.30.30.0 255.255.255.252
-exit
-
-object network ServerRoom
-subnet 172.16.10.0 255.255.255.0
-exit
-
-access-list OUT-IN extended permit icmp any any
-access-list OUT-IN extended permit tcp any any
-access-group OUT-IN in interface outside
-
