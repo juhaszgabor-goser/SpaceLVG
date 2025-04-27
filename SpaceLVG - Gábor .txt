@@ -1,0 +1,255 @@
+-----------------------------------------------------------------------------------------------------------------------------------
+				ASA
+-----------------------------------------------------------------------------------------------------------------------------------
+enable
+
+
+configure terminal
+hostname ServerFirewall
+enable password class123
+
+interface gigabitethernet1/1
+nameif inside
+security-level 100
+ip address 172.16.10.1 255.255.255.0
+no shutdown
+exit
+
+interface gigabitethernet1/2
+nameif outside
+security-level 0
+ip address 30.30.30.1 255.255.255.252
+no shutdown
+exit
+
+router eigrp 100
+eigrp router-id 10.10.10.10
+no auto-summary
+redistribute static
+network 172.16.10.0 255.255.255.0
+network 30.30.30.0 255.255.255.252
+exit
+route outside 209.111.222.0 255.255.255.0 30.30.30.2 1
+
+object network ServerRoom
+subnet 172.16.10.0 255.255.255.0
+exit
+
+access-list OUT-IN extended permit icmp any any
+access-list OUT-IN extended permit tcp any any
+access-group OUT-IN in interface outside
+
+-----------------------------------------------------------------------------------------------------------------------------------
+								SMT Switch
+-----------------------------------------------------------------------------------------------------------------------------------
+
+en
+clock set 12:20:00 25 febr 2025
+conf t
+host SMT Switch
+no ip domain-l
+ena sec secret123
+banner motd "SMT Switch"
+
+ip domain-name SpaceLVG.hu
+cry k g r
+2048
+
+username admin priv 15 secret class123
+ip ssh version 2
+lin vty 0 15
+login local
+transport input ssh
+exit
+
+vlan 1000
+name Blackhole
+exit
+
+
+int r f0/5-24, g0/2
+swit mode acc
+swit acc vlan 1000
+sh
+exit
+
+lin con 0
+pass class123
+login
+logg syn
+exec 7
+exit
+
+lin vty 0 15
+pass class123
+login
+logg syn
+exec 7
+exit
+
+
+int r f0/1-4
+swit port agin tim 60
+swit port max 3
+swit port viola rest
+exit
+
+--------------------------------------------------------------------------------------------------------------------
+								Server_NAT_router
+--------------------------------------------------------------------------------------------------------------------
+
+en
+clock set 12:20:00 25 febr 2025
+conf t
+host Server_NAT_router
+no ip domain-l
+ena sec secret123
+banner motd "Connects to the internet provider"
+
+lin con 0
+pass class123
+login
+logg syn
+exec 7
+exit
+
+lin vty 0 15
+pass class123
+login
+logg syn
+exec 7
+exit
+
+
+
+ip domain-name SpaceLVG.hu
+cry k g r
+2048
+
+username admin priv 15 secret class123
+ip ssh version 2
+lin vty 0 15
+login local
+transport input ssh
+exit
+
+int s0/3/0
+ip add 10.10.120.1 255.255.255.252
+clock rate 4000000
+no sh
+des Connection Router 1 fele
+exit
+
+int s0/2/0
+ip add 10.10.130.2 255.255.255.252
+des Server Room Router fele
+no sh
+exit
+
+
+int g0/1
+ip add 30.30.10.2 255.255.255.252
+des FLOATROUTE to MR fele
+no sh
+exit
+
+
+int g0/0
+ip add 30.30.30.2 255.255.255.252
+des ASA Firewall fele
+no sh
+exit
+
+ip nat pool natpool 209.111.222.101 209.111.222.199 netmask 255.255.255.0
+ip nat inside source list 10 pool natpool
+ip nat inside source static 172.16.10.254 209.111.222.10 
+
+int g0/0
+ip nat inside
+exit
+int s0/2/0
+ip nat outside
+exit
+int s0/3/0
+ip nat outside
+exit
+
+
+router eigrp 100
+eigr ro 6.6.6.6
+no auto
+redistribute static
+netw 30.30.30.0 0.0.0.3
+netw 10.10.120.0 0.0.0.3
+netw 10.10.130.0 0.0.0.3
+exit
+
+ip route 209.111.222.0 255.255.255.0 30.30.30.2 1
+ip route 0.0.0.0 0.0.0.0 30.30.10.1 100
+
+--------------------------------------------------------------------------------------------------------------------
+								Server Room Router
+--------------------------------------------------------------------------------------------------------------------
+
+en
+clock set 12:20:00 25 febr 2025
+conf t
+host SRR
+no ip domain-l
+ena sec secret123
+banner motd "This router is responsible for the security of servers"
+
+lin con 0
+pass class123
+login
+logg syn
+exec 7
+exit
+
+lin vty 0 15
+pass class123
+login
+logg syn
+exec 7
+exit
+
+
+ip domain-name SpaceLVG.hu
+cry k g r
+2048
+
+username administrator priv 15 secret class123
+ip ssh version 2
+lin vty 0 15
+login local
+transport input ssh
+exit
+
+
+interface gigabitethernet0/0
+ip address 192.168.69.1 255.255.255.0
+description Raktar atjaroja
+no shutdown
+exit
+
+
+
+int s0/3/0
+ip add 10.10.50.1 255.255.255.252
+no sh
+des Main Router fele
+clock rate 4000000
+exit
+
+int s0/2/0
+ip add 10.10.130.1 255.255.255.252
+no sh
+des Server_NAT_router fele
+clock rate 4000000
+exit
+
+int g0/1
+no ip address 20.20.10.2 255.255.255.252
+no des ASA Firewall fele
+sh
+exit
