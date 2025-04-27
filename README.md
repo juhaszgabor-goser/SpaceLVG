@@ -10,6 +10,5 @@
  - [Jira link](https://spacelvg.atlassian.net/jira/)
 
 *Publikus Video Linkek*
- - [Linux Szerver link] (Nincs Egyenlore)
- - [Windows Szerver link] (Nincs Egyenlore)
- - [Topologia Ellenorzes Video link] (Nincs Egyenlore)
+ - [Linux,Windows Szerver  + Topologia Ellenorzes link] [(KESZ)](https://turristvanszakkozepisk-my.sharepoint.com/:f:/g/personal/juhaszgabor_turr_hu/ElDHzQtH5sZMvgckOktKkasBuMRYKYodraeGnX7XuCrikA?e=Omdxw7)
+
