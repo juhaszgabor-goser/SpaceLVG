@@ -22,11 +22,15 @@ ser pass
 banner motd "Ez egy privat switch!"
 vlan 10
 name Iranyito
-exit
+vlan 20
+name Tervezo_kozpont
+valn 30
+name Kutato
 vlan 137
 name Native
 vlan 999
 name Blackhole
+ex
 ip domain-name SpaceLVG.hu
 crypto key generate rsa
 2048
@@ -97,13 +101,17 @@ exec 5
 exit
 ser pass
 banner motd "Ez egy privat switch!"
+vlan 10
+name Iranyito
+vlan 20
+name Tervezo_kozpont
+valn 30
+name Kutato
 vlan 137
 name Native
 vlan 999
 name Blackhole
-vlan 30
-name Kutato_kozpont
-exit
+ex
 ip domain-name SpaceLVG.hu
 crypto key generate rsa
 2048
@@ -176,14 +184,18 @@ exec 5
 exit
 ser pass
 banner motd "Ez egy privat switch!"
+vlan 10
+name Iranyito
 vlan 20
 name Tervezo_kozpont
-exit
+valn 30
+name Kutato
 vlan 137
 name Native
 vlan 999
 name Blackhole
 ex
+
 ip domain-name SpaceLVG.hu
 crypto key generate rsa
 2048
@@ -268,6 +280,18 @@ transport input ssh
 exit
 exit
 copy running-config startup-config
+
+vlan 10
+name Iranyito
+vlan 20
+name Tervezo
+valn 30
+name Kutato
+vlan 137
+name Native
+vlan 999
+name Blackhole
+ex
 
 
 int r fa0/8-9
