@@ -8,7 +8,7 @@ ena sec class123
 no ip domain-lookup
 line con 0
 pass cisco123
-login
+login 
 logg syn
 exec 5
 exit
@@ -23,6 +23,10 @@ banner motd "Ez egy privat switch!"
 vlan 10
 name Iranyito
 exit
+vlan 137
+name Native
+vlan 999
+name Blackhole
 ip domain-name SpaceLVG.hu
 crypto key generate rsa
 2048
@@ -36,14 +40,40 @@ exit
 copy running-config startup-config
 
 
+int r fa0/1-2
+swit mode acc
+swit acc vlan 10
+int r fa0/4-5
+swit mode acc
+swit acc vlan 10
+int r fa0/3, fa0/8-11, fa0/14-24
+sh
+ex
 
 
 
+int r fa0/12-13
+swit mode trunk
+channel-g 1 mode on
+ex
+int port-channel 1
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+int r fa0/6-7
+swit mode trunk
+channel-g 4 mode pass
+ex
+int port-channel 4
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
 
 
 
-
-
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Kutató központ Switch
 
@@ -67,6 +97,10 @@ exec 5
 exit
 ser pass
 banner motd "Ez egy privat switch!"
+vlan 137
+name Native
+vlan 999
+name Blackhole
 vlan 30
 name Kutato_kozpont
 exit
@@ -83,8 +117,42 @@ exit
 copy running-config startup-config
 
 
+int r fa0/1-2
+swit mode acc
+swit acc vlan 30
+int r fa0/4-5
+swit mode acc
+swit acc vlan 30
+int r fa0/3, fa0/8-9, fa0/14-24
+swit mode acc
+swit acc vlan 999
+sh
+ex
 
 
+int r fa0/12-13
+swit mode trunk
+channel-g 1 mode des
+ex
+int port-channel 1
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+
+int r fa0/10-11
+swit mode trunk
+channel-g 2 mode act
+ex
+int port-channel 2
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Tervező központ Switch
 
@@ -111,6 +179,11 @@ banner motd "Ez egy privat switch!"
 vlan 20
 name Tervezo_kozpont
 exit
+vlan 137
+name Native
+vlan 999
+name Blackhole
+ex
 ip domain-name SpaceLVG.hu
 crypto key generate rsa
 2048
@@ -124,10 +197,43 @@ exit
 copy running-config startup-config
 
 
+int r fa0/1-2
+swit mode acc
+swit acc vlan 20
+int r fa0/4-5
+swit mode acc
+swit acc vlan 20
+int r fa0/3, fa0/6-7, fa0/12-24
+swit mode acc
+swit acc vlan 999
+sh
+ex
 
 
 
+int r fa0/10-11
+swit mode trunk
+channel-g 2 mode pass
+ex
+int port-channel 2
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
 
+
+int r fa0/8-9
+swit mode trunk
+channel-g 3 mode on
+ex
+int port-channel 3
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Összekötő Switch 1
 
@@ -164,6 +270,30 @@ exit
 copy running-config startup-config
 
 
+int r fa0/8-9
+swit mode trunk
+channel-g 3 mode des
+ex
+int port-channel 3
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+
+
+int r fa0/6-7
+swit mode trunk
+channel-g 4 mode act
+ex
+int port-channel 4
+swit mode trunk
+swit trunk allow vlan 10,20,30,137,999
+swit trunk nat vlan 137
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Központ Router:
 ena
@@ -231,8 +361,36 @@ no sh
 
 
 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Összekötő switch
+Irányító Switch Portbiztonság:
+
+ 
+int r fa0/3, fa0/6-9, fa0/14-23, g0/2
+swit mode acc
+swit acc vlan 999
+sh
+ex
+
+ 
+
+------------------------------------------------------------------------ 
+------------------------------------------------------------------------ 
+
+Kutató Switch Portbiztonság:
+ 
+int r fa0/3, fa0/8-11, fa0/14-23, g0/2
+swit mode acc
+swit acc vlan 999
+sh
+ex
+
+ 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+Összekötő switch vtp:
 
 vtp mode server
 vtp domain SpaceLVG.com
@@ -242,8 +400,10 @@ ex
 
 
 
+------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Iranyito Switch, Kutato Switch, Tervezés Switch
+Iranyito Switch, Kutato Switch, Tervezés Switch vtp:
 
 vtp mode client
 vtp domain SpaceLVG.com
